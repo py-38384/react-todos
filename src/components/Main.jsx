@@ -1,7 +1,7 @@
 import Input from './Input'
 import Button from './Button'
 import Todo from './Todo';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useId, useState } from 'react';
 
 export const todoContext = createContext() 
 const Main = () => {
@@ -14,10 +14,17 @@ const Main = () => {
     })
     const [newTodo, setNewTodo] = useState('')
     const adTodo = () => {
+        const date = new Date();
+        const formattedDate = date.toLocaleDateString('en-GB');
+        const fetchId = localStorage.getItem('todoId')
+        let id = fetchId?parseInt(fetchId):1
         const newTodoObj = {
-            id: todos? todos.length + 1: 1,
+            id: id,
+            date: formattedDate,
             text: newTodo
         }
+        id += 1
+        localStorage.setItem('todoId',id)
         setTodos(todos?[...todos, newTodoObj]: [newTodoObj])
         setNewTodo('')
     }

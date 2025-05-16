@@ -27,7 +27,6 @@ const Todo = ({ todo, slNumber }) => {
         setTodos(prev => prev.filter(item => item.id !== todo.id))
     }
     useEffect(() => {
-        console.log(value)
         setTodos(todos.map(item => item.id === todo.id? {...item, text:value} : item))
     }, [value])
     useEffect(() => {
