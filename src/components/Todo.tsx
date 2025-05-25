@@ -1,26 +1,32 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, type ChangeEvent } from "react";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { todoContext } from "./Main";
+import { type todoType } from "../Types";
 
-const Todo = ({ todo, slNumber }) => {
-    const textareaRef = useRef()
+type propsType = {
+    todo: todoType,
+    slNumber: number,
+}
+
+const Todo = ({ todo, slNumber }: propsType) => {
+    const textareaRef = useRef<HTMLTextAreaElement|null>(null)
     const {todos, setTodos} = useContext(todoContext)
 
     const [value, setValue] = useState(todo.text)
     const resizeTextarea = () => {
         const textarea = textareaRef.current
-        textarea.style.height = `${textarea.scrollHeight}px`
+        if(textarea) textarea.style.height = `${textarea.scrollHeight}px`
     }
     const blurTextarea = () => {
         const textarea = textareaRef.current
-        textarea.style.height = '40px';
+        if(textarea) textarea.style.height = '40px';
     }
     const focusTextarea = () => {
         const textarea = textareaRef.current
-        textarea.style.display = 'flex'
+        if(textarea) textarea.style.display = 'flex'
         resizeTextarea()
     }
-    const updateTodo = (e) => {
+    const updateTodo = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setValue(e.target.value)
     }
     const deleteTodo = () => {
@@ -31,13 +37,13 @@ const Todo = ({ todo, slNumber }) => {
     }, [value])
     useEffect(() => {
         const textarea = textareaRef.current
-        textarea.addEventListener('input',resizeTextarea)
-        textarea.addEventListener('blur',blurTextarea)
-        textarea.addEventListener('focus',focusTextarea)
+        if(textarea)textarea.addEventListener('input',resizeTextarea)
+        if(textarea)textarea.addEventListener('blur',blurTextarea)
+        if(textarea)textarea.addEventListener('focus',focusTextarea)
         return () => {
-            textarea.removeEventListener('input',resizeTextarea)
-            textarea.addEventListener('blur',blurTextarea)
-            textarea.addEventListener('focus',focusTextarea)
+            if(textarea)textarea.removeEventListener('input',resizeTextarea)
+            if(textarea)textarea.addEventListener('blur',blurTextarea)
+            if(textarea)textarea.addEventListener('focus',focusTextarea)
         }
     }, [])
 

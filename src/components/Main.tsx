@@ -1,9 +1,12 @@
 import Input from './Input'
 import Button from './Button'
 import Todo from './Todo';
-import { createContext, useEffect, useId, useState } from 'react';
+import { createContext, useEffect, useState} from 'react';
+import { type todoContextType, type todoType } from '../Types';
+import { defaultTodoContextValue } from '../DefaultValues'
 
-export const todoContext = createContext() 
+export const todoContext = createContext<todoContextType>(defaultTodoContextValue) 
+
 const Main = () => {
     const [todos, setTodos] = useState(() => {
         const stringifyTodo = localStorage.getItem('todos')
@@ -24,7 +27,7 @@ const Main = () => {
             text: newTodo
         }
         id += 1
-        localStorage.setItem('todoId',id)
+        localStorage.setItem('todoId', String(id))
         setTodos(todos?[...todos, newTodoObj]: [newTodoObj])
         setNewTodo('')
     }
@@ -38,11 +41,11 @@ const Main = () => {
         <div className='min-h-[100vh] flex justify-center items-center bg-slate-200'>
             <div>
                 <div>
-                    <Input newTodo={newTodo} onInput={(e) => setNewTodo(e.target.value)}/>
+                    <Input newTodo={newTodo} onChange={(e) => setNewTodo(e.target.value)}/>
                     <Button onClick={adTodo}/>
                 </div>
                 <div className='mt-2 flex flex-col gap-y-2'>
-                    {todos && todos.map((todo, index) => (
+                    {todos && todos.map((todo:todoType, index:number) => (
                         <Todo key={todo.id} slNumber={index+1} todo={todo}/>
                     ))}
                 </div>
